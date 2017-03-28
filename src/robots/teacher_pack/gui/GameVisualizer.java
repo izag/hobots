@@ -51,6 +51,8 @@ public class GameVisualizer extends JPanel implements FieldChangeListener
         m_field.robot().draw(g2d);
         drawTarget(g2d, (int) m_field.target().x(), (int) m_field.target().y());
         drawSquare(g2d, (int) m_field.collision().center().x(), (int) m_field.collision().center().x());
+
+        g2d.dispose();
     }
 
     private void drawTarget(Graphics2D g, int x, int y)

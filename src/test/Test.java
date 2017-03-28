@@ -70,6 +70,8 @@ public class Test {
 
             gg.setColor(Color.BLACK);
             gg.draw(rectangle);
+
+            gg.dispose();
         }
     }
 

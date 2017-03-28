@@ -75,7 +75,7 @@ public class MapUtils
 
     public static Map<String, String> loadMap(File file)
     {
-        HashMap<String, String> map = new HashMap<String, String>();
+        HashMap<String, String> map = new HashMap<>();
         loadMap(file, map);
         return map;
     }
@@ -113,4 +113,8 @@ public class MapUtils
         }
     }
 
+    public static String[] getPrefixes(Map<String, String> map)
+    {
+    	return map.keySet().stream().map((String key) -> key.split("\\.")[0]).distinct().toArray(String[]::new);
+    }
 }

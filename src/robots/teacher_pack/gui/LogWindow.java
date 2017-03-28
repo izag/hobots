@@ -2,7 +2,6 @@ package robots.teacher_pack.gui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.util.Map;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
@@ -12,9 +11,8 @@ import robots.teacher_pack.log.LogChangeListener;
 import robots.teacher_pack.log.LogEntry;
 import robots.teacher_pack.log.LogLevel;
 import robots.teacher_pack.log.LogWindowSource;
-import robots.teacher_pack.utils.StateUtils;
 
-public class LogWindow extends JInternalFrame implements LogChangeListener, ComponentWithState
+public class LogWindow extends JInternalFrame implements LogChangeListener
 {
 	private static final long serialVersionUID = 1L;
 	private LogWindowSource m_logSource;
@@ -58,17 +56,5 @@ public class LogWindow extends JInternalFrame implements LogChangeListener, Comp
     public void onLogChanged()
     {
         EventQueue.invokeLater(this::updateLogContent);
-    }
-
-    @Override
-	public void saveComponentState(Map<String, String> state)
-    {
-        StateUtils.saveComponentState(this, state);
-    }
-
-    @Override
-	public void loadComponentState(Map<String, String> state)
-    {
-        StateUtils.loadComponentState(this, state);
     }
 }

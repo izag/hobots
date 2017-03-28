@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ import robots.teacher_pack.log.LogLevel;
 import robots.teacher_pack.log.Logger;
 import robots.teacher_pack.models.Field;
 import robots.teacher_pack.utils.MapUtils;
+import robots.teacher_pack.utils.StateUtils;
 import robots.teacher_pack.utils.SubMapView;
 
 public class MainApplicationFrame extends JFrame
@@ -46,12 +48,12 @@ public class MainApplicationFrame extends JFrame
 
 		setContentPane(m_desktopPane);
 
-		m_logDebug = addWindow(createLogDebug(LogLevel.Debug));
+		m_logDebug = addWindow(createLogWindow(LogLevel.Debug));
 		m_gameWindow = addWindow(new GameWindow(field), 400, 400);
-		m_logError = addWindow(createLogError(LogLevel.Error));
+		m_logError = addWindow(createLogWindow(LogLevel.Error));
 
 		// bug: only 1 game window repaints
-		// addWindow(new GameWindow(field), 400, 400);
+		addWindow(new GameWindow(field), 400, 400);
 
 		RobotStateWindow stateWindow = addWindow(new RobotStateWindow("Robot-1", field.robot()));
 
@@ -89,30 +91,33 @@ public class MainApplicationFrame extends JFrame
 	{
 		HashMap<String, String> state = new HashMap<>();
 
-//		m_logError.saveComponentState(new SubMapView(state, "logError"));
-//		m_gameWindow.saveComponentState(new SubMapView(state, "gameWindow"));
+		int counter = 0;
+		for (JInternalFrame frame : this.m_desktopPane.getAllFrames())
+		{
+			counter++;
+			StateUtils.saveComponentState(frame, new SubMapView(state, frame.getClass().getSimpleName() + "-" + counter));
+
+			System.out.println(frame.getClass().getSimpleName() + "-" + counter);
+		}
+
+		state.keySet().stream().forEach(System.out::println);
+
 		MapUtils.saveMap(SETTINGS_FILE_NAME, state);
+
 	}
 
 	private void loadSavedState()
 	{
 		Map<String, String> state = MapUtils.loadMap(SETTINGS_FILE_NAME);
-		m_logDebug.loadComponentState(new SubMapView(state, "logDebug"));
-		m_logError.loadComponentState(new SubMapView(state, "logError"));
-		m_gameWindow.loadComponentState(new SubMapView(state, "gameWindow"));
+
+		Arrays.stream(MapUtils.getPrefixes(state)).forEach(System.out::println);
+
+//		m_logDebug.loadComponentState(new SubMapView(state, "logDebug"));
+//		m_logError.loadComponentState(new SubMapView(state, "logError"));
+//		m_gameWindow.loadComponentState(new SubMapView(state, "gameWindow"));
 	}
 
-	protected LogWindow createLogError(LogLevel level)
-	{
-		LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), "Протокол работы", level);
-		logWindow.setLocation(10, 10);
-		logWindow.setSize(300, 800);
-		setMinimumSize(logWindow.getSize());
-		logWindow.pack();
-		return logWindow;
-	}
-
-	protected LogWindow createLogDebug(LogLevel level)
+	protected LogWindow createLogWindow(LogLevel level)
 	{
 		LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), "Положение робота", level);
 		logWindow.setLocation(200, 10);
@@ -154,13 +159,13 @@ public class MainApplicationFrame extends JFrame
 		lookAndFeelMenu.getAccessibleContext().setAccessibleDescription("Управление режимом отображения приложения");
 
 		lookAndFeelMenu.add(createMenuItem("Системная схема", KeyEvent.VK_S, null,
-				(event) -> setLookAndFeel(UIManager.getSystemLookAndFeelClassName())));
+			(event) -> setLookAndFeel(UIManager.getSystemLookAndFeelClassName())));
 
 		lookAndFeelMenu.add(createMenuItem("Универсальная схема", KeyEvent.VK_U, null,
-				(event) -> setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName())));
+			(event) -> setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName())));
 
 		lookAndFeelMenu.add(createMenuItem("Универсальная схема (Nimbus)", KeyEvent.VK_N, null,
-						(event) -> setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel")));
+			(event) -> setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel")));
 
 		return lookAndFeelMenu;
 	}
@@ -183,8 +188,8 @@ public class MainApplicationFrame extends JFrame
 		menuBar.add(generateLookAndFeelMenu());
 		menuBar.add(generateTestMenu());
 		menuBar.add(createMenuItem("Выход", KeyEvent.VK_X, KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_MASK),
-				(event) -> Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
-						new WindowEvent(this,WindowEvent.WINDOW_CLOSING))));
+			(event) -> Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
+				new WindowEvent(this,WindowEvent.WINDOW_CLOSING))));
 
 		return menuBar;
 	}

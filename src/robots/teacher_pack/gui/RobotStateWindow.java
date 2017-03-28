@@ -19,6 +19,7 @@ public class RobotStateWindow extends JInternalFrame implements Observer
 	public RobotStateWindow(String caption, Robot observable)
     {
         super(caption, true, true, true, true);
+
         m_content = new JTextArea("");
         m_content.setSize(300, 300);
         m_content.setPreferredSize(m_content.getSize());

@@ -4,18 +4,17 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.util.Map;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
 import robots.teacher_pack.models.Field;
-import robots.teacher_pack.utils.StateUtils;
 
-public class GameWindow extends JInternalFrame implements ComponentWithState
+public class GameWindow extends JInternalFrame
 {
 	private static final long serialVersionUID = 1L;
 	private final GameVisualizer m_visualizer;
+
     public GameWindow(Field field)
     {
         super("Игровое поле", true, true, true, true);
@@ -51,17 +50,5 @@ public class GameWindow extends JInternalFrame implements ComponentWithState
 				EventQueue.invokeLater(() -> { m_visualizer.repaint(); repaint(); });
 			}
         });
-    }
-
-    @Override
-	public void saveComponentState(Map<String, String> state)
-    {
-        StateUtils.saveComponentState(this, state);
-    }
-
-    @Override
-	public void loadComponentState(Map<String, String> state)
-    {
-        StateUtils.loadComponentState(this, state);
     }
 }
