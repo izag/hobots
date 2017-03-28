@@ -29,10 +29,10 @@ public class LogWindow extends JInternalFrame implements LogChangeListener
 
         m_level = level;
 
-        JScrollPane scrollPane = new JScrollPane(m_logContent);
-
+        JScrollPane panel = new JScrollPane(m_logContent);
         this.setPreferredSize(m_logContent.getSize());
-        this.getContentPane().add(scrollPane, BorderLayout.CENTER);
+        this.getContentPane().add(panel, BorderLayout.CENTER);
+
         this.pack();
         this.updateLogContent();
     }
