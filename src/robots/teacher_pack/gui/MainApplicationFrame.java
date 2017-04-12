@@ -8,7 +8,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,9 +34,7 @@ public class MainApplicationFrame extends JFrame
 {
 	private static final long serialVersionUID = 1L;
 	private final JDesktopPane m_desktopPane = new JDesktopPane();
-	private final LogWindow m_logDebug;
-	private final LogWindow m_logError;
-	private final GameWindow m_gameWindow;
+	private final Field m_field;
 
 	public MainApplicationFrame(Field field)
 	{
@@ -47,17 +44,6 @@ public class MainApplicationFrame extends JFrame
 		setBounds(inset, inset, screenSize.width - inset * 2, screenSize.height - inset * 2);
 
 		setContentPane(m_desktopPane);
-
-		m_logDebug = addWindow(createLogWindow(LogLevel.Debug));
-		m_gameWindow = addWindow(new GameWindow(field), 400, 400);
-		m_logError = addWindow(createLogWindow(LogLevel.Error));
-
-		// bug: only 1 game window repaints
-		addWindow(new GameWindow(field), 400, 400);
-
-		RobotStateWindow stateWindow = addWindow(new RobotStateWindow("Robot-1", field.robot()));
-
-		field.robot().addObserver(stateWindow);
 
 		setJMenuBar(generateMenuBar());
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -70,6 +56,8 @@ public class MainApplicationFrame extends JFrame
 				onWindowClose();
 			}
 		});
+
+		this.m_field = field;
 
 		loadSavedState();
 	}
@@ -92,29 +80,60 @@ public class MainApplicationFrame extends JFrame
 		HashMap<String, String> state = new HashMap<>();
 
 		int counter = 0;
+
 		for (JInternalFrame frame : this.m_desktopPane.getAllFrames())
 		{
 			counter++;
-			StateUtils.saveComponentState(frame, new SubMapView(state, frame.getClass().getSimpleName() + "-" + counter));
 
+			StateUtils.saveComponentState(frame, new SubMapView(state, frame.getClass().getSimpleName() + "-" + counter));
 			System.out.println(frame.getClass().getSimpleName() + "-" + counter);
 		}
 
 		state.keySet().stream().forEach(System.out::println);
 
 		MapUtils.saveMap(SETTINGS_FILE_NAME, state);
-
 	}
 
 	private void loadSavedState()
 	{
 		Map<String, String> state = MapUtils.loadMap(SETTINGS_FILE_NAME);
 
-		Arrays.stream(MapUtils.getPrefixes(state)).forEach(System.out::println);
+		if (state.isEmpty())
+		{
+			loadDefaultState();
+			return;
+		}
 
-//		m_logDebug.loadComponentState(new SubMapView(state, "logDebug"));
-//		m_logError.loadComponentState(new SubMapView(state, "logError"));
-//		m_gameWindow.loadComponentState(new SubMapView(state, "gameWindow"));
+		for (String prefix : MapUtils.getPrefixes(state))
+		{
+			System.out.println(prefix);
+			String type = prefix.split("-")[0];
+
+			JInternalFrame frame = null;
+
+			switch (type)
+			{
+				case "GameWindow":
+					frame = addWindow(new GameWindow(this.m_field));
+					break;
+				case "LogWindow":
+					frame = addWindow(createLogWindow(LogLevel.Debug));
+					break;
+				default:
+					continue;
+			}
+
+			StateUtils.loadComponentState(frame, new SubMapView(state, prefix));
+		}
+	}
+
+	private void loadDefaultState()
+	{
+		addWindow(new GameWindow(this.m_field), 400, 400);
+		addWindow(createLogWindow(LogLevel.Error));
+
+		RobotStateWindow stateWindow = addWindow(new RobotStateWindow("Robot-1", this.m_field.robot()));
+		this.m_field.robot().addObserver(stateWindow);
 	}
 
 	protected LogWindow createLogWindow(LogLevel level)
@@ -183,11 +202,35 @@ public class MainApplicationFrame extends JFrame
 		return testMenu;
 	}
 
+	private JMenuItem generateAddWindowMenu()
+	{
+		JMenu addMenu = new JMenu("Добавить окно");
+		addMenu.setMnemonic(KeyEvent.VK_W);
+		addMenu.getAccessibleContext().setAccessibleDescription("Добавление новых окон");
+
+		addMenu.add(createMenuItem("Протокол ошибок", KeyEvent.VK_E, null,
+				(event) -> addWindow(createLogWindow(LogLevel.Error))));
+
+		addMenu.add(createMenuItem("Протокол отладки", KeyEvent.VK_D, null,
+				(event) -> addWindow(createLogWindow(LogLevel.Debug))));
+
+		addMenu.add(createMenuItem("Игровое окно", KeyEvent.VK_G, null,
+				(event) -> addWindow(new GameWindow(this.m_field), 400, 400)));
+
+		addMenu.add(createMenuItem("Состояние робота", KeyEvent.VK_S, null, (event) -> {
+			RobotStateWindow stateWindow = addWindow(new RobotStateWindow("Robot-1", this.m_field.robot()));
+			this.m_field.robot().addObserver(stateWindow);
+		}));
+
+		return addMenu;
+	}
+
 	private JMenuBar generateMenuBar()
 	{
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.add(generateLookAndFeelMenu());
 		menuBar.add(generateTestMenu());
+		menuBar.add(generateAddWindowMenu());
 		menuBar.add(createMenuItem("Выход", KeyEvent.VK_X, KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_MASK),
 			(event) -> Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
 				new WindowEvent(this,WindowEvent.WINDOW_CLOSING))));

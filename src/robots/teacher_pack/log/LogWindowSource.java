@@ -20,57 +20,71 @@ public class LogWindowSource
 
     public LogWindowSource(int iQueueLength)
     {
-        m_messages = new ArrayBlockingQueue<>(iQueueLength);
-        m_listeners = new ArrayList<>();
+    	this.m_messages = new ArrayBlockingQueue<>(iQueueLength);
+    	this.m_listeners = new ArrayList<>();
     }
 
     public void registerListener(LogChangeListener listener)
     {
-        synchronized(m_listeners)
+        synchronized(this.m_listeners)
         {
-            m_listeners.add(listener);
-            m_activeListeners = null;
+            this.m_listeners.add(listener);
+            this.m_activeListeners = null;
         }
     }
 
     public void unregisterListener(LogChangeListener listener)
     {
-        synchronized(m_listeners)
+        synchronized(this.m_listeners)
         {
-            m_listeners.remove(listener);
-            m_activeListeners = null;
+        	this.m_listeners.remove(listener);
+        	this.m_activeListeners = null;
         }
     }
 
     public void append(LogLevel logLevel, String strMessage)
     {
         LogEntry entry = new LogEntry(logLevel, strMessage);
-        m_messages.add(entry);
+
+        boolean success = false;
+
+        while (!success)
+        {
+	        try
+	        {
+	        	this.m_messages.add(entry);
+	        	success = true;
+	        }
+	        catch (IllegalStateException ex)
+	        {
+	        	this.m_messages.poll();
+	        }
+        }
+
         LogChangeListener [] activeListeners = m_activeListeners;
         if (activeListeners == null)
         {
-            synchronized (m_listeners)
+            synchronized (this.m_listeners)
             {
-                if (m_activeListeners == null)
+                if (this.m_activeListeners == null)
                 {
-                    activeListeners = m_listeners.toArray(new LogChangeListener [0]);
-                    m_activeListeners = activeListeners;
+                    activeListeners = this.m_listeners.toArray(new LogChangeListener [0]);
+                    this.m_activeListeners = activeListeners;
                 }
             }
         }
+
         for (LogChangeListener listener : activeListeners)
-        {
             listener.onLogChanged();
-        }
     }
 
     public int size()
     {
-        return m_messages.size();
+        return this.m_messages.size();
     }
 
     public Iterable<LogEntry> all()
     {
-        return m_messages;
+        return this.m_messages;
     }
 }
