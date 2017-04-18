@@ -21,15 +21,21 @@ public class Utils
         return value;
     }
 
-    public static double asNormalizedRadians(double angle)
-    {
-        return angle;
-    }
-
     public static double distance(Point p1, Point p2)
     {
         double diffX = p1.x() - p2.x();
         double diffY = p1.y() - p2.y();
         return Math.sqrt(diffX * diffX + diffY * diffY);
     }
+
+    public static double asNormalizedRadians(double angle)
+	{
+		while (angle <= -Math.PI)
+			angle += 2 * Math.PI;
+
+		while (angle > Math.PI)
+			angle -= 2 * Math.PI;
+
+		return angle;
+	}
 }

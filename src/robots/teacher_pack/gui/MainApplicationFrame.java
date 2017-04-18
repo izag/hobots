@@ -38,10 +38,12 @@ public class MainApplicationFrame extends JFrame
 
 	public MainApplicationFrame(Field field)
 	{
-		int inset = 50;
+		int inset = 100;
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
-		setBounds(inset, inset, screenSize.width - inset * 2, screenSize.height - inset * 2);
+		System.out.println(screenSize);
+
+		m_desktopPane.setPreferredSize(new Dimension(screenSize.width - inset, screenSize.height - inset));
 
 		setContentPane(m_desktopPane);
 
@@ -119,6 +121,11 @@ public class MainApplicationFrame extends JFrame
 				case "LogWindow":
 					frame = addWindow(createLogWindow(LogLevel.Debug));
 					break;
+				case "RobotStateWindow":
+					RobotStateWindow stateWindow = addWindow(new RobotStateWindow("Robot-1", this.m_field.robot()));
+					this.m_field.robot().addObserver(stateWindow);
+					frame = stateWindow;
+					break;
 				default:
 					continue;
 			}
@@ -140,7 +147,6 @@ public class MainApplicationFrame extends JFrame
 	{
 		LogWindow logWindow = new LogWindow(Logger.getDefaultLogSource(), "Положение робота", level);
 		logWindow.setLocation(200, 10);
-		logWindow.setSize(400, 800);
 		setMinimumSize(logWindow.getSize());
 		logWindow.pack();
 		Logger.debug("Протокол работает");
@@ -233,7 +239,7 @@ public class MainApplicationFrame extends JFrame
 		menuBar.add(generateAddWindowMenu());
 		menuBar.add(createMenuItem("Выход", KeyEvent.VK_X, KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_MASK),
 			(event) -> Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
-				new WindowEvent(this,WindowEvent.WINDOW_CLOSING))));
+				new WindowEvent(this, WindowEvent.WINDOW_CLOSING))));
 
 		return menuBar;
 	}

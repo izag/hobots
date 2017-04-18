@@ -27,12 +27,10 @@ public class RobotsProgram
 
 		SwingUtilities.invokeLater(() -> {
 		    MainApplicationFrame frame = new MainApplicationFrame(field);
-		    frame.pack();
 		    frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-		    frame.setLocationRelativeTo(null);
+		    frame.pack();
 		    frame.setVisible(true);
 		});
-
 
 		field.start();
 	}

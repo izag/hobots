@@ -57,8 +57,7 @@ public class Robot extends Observable
             newY = m_position.y() + velocity * duration * Math.sin(m_direction);
 
         m_position = new Point(newX, newY);
-        double newDirection = m_direction + angularVelocity * duration;
-        m_direction = newDirection;
+        m_direction = Utils.asNormalizedRadians(m_direction + angularVelocity * duration);
 
         setChanged();
         notifyObservers();

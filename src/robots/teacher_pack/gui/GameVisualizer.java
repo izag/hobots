@@ -7,25 +7,26 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
 import robots.teacher_pack.models.Field;
-import robots.teacher_pack.models.FieldChangeListener;
 import robots.teacher_pack.utils.GraphicsUtils;
 
-public class GameVisualizer extends JPanel implements FieldChangeListener
+public class GameVisualizer extends JPanel
 {
 	private static final long serialVersionUID = 1L;
 	private final Field m_field;
+
+	private final Timer m_timer;
 
     public GameVisualizer(Field field)
     {
     	m_field = field;
 
-    	m_field.registerListener(this);
-
-        addMouseListener(new MouseAdapter()
+        this.addMouseListener(new MouseAdapter()
         {
             @Override
             public void mouseReleased(MouseEvent e)
@@ -35,10 +36,20 @@ public class GameVisualizer extends JPanel implements FieldChangeListener
         });
 
         setDoubleBuffered(true);
+
+        m_timer = new Timer("View updater", true);
+
+        m_timer.schedule(new TimerTask()
+        {
+            @Override
+            public void run()
+            {
+                onRedrawEvent();
+            }
+        }, 0, 50);
     }
 
-    @Override
-	public void onFieldChanged()
+	private void onRedrawEvent()
     {
         EventQueue.invokeLater(this::repaint);
     }
