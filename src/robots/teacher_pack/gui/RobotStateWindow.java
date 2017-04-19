@@ -38,6 +38,6 @@ public class RobotStateWindow extends JInternalFrame implements Observer
 		if (obj != m_robot)
 			return;
 
-		m_content.setText("Position: " + m_robot.position() + "\nDirection: " + m_robot.direction());
+		m_content.setText("Position: " + m_robot.position() + "\nDirection: " + m_robot.direction() + "\nCounter: " + m_robot.counter());
 	}
 }

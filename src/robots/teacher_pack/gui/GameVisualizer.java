@@ -58,22 +58,14 @@ public class GameVisualizer extends JPanel
     public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
+
         Graphics2D g2d = (Graphics2D)g;
-        m_field.robot().draw(g2d);
-        drawTarget(g2d, (int) m_field.target().x(), (int) m_field.target().y());
-        drawSquare(g2d, (int) m_field.collision().center().x(), (int) m_field.collision().center().x());
+
+        m_field.currentRobot().draw(g2d);
+        m_field.currentRobot().drawTarget(g2d);
+        this.drawSquare(g2d, (int) m_field.collision().center().x(), (int) m_field.collision().center().y());
 
         g2d.dispose();
-    }
-
-    private void drawTarget(Graphics2D g, int x, int y)
-    {
-    	AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0);
-        g.setTransform(t);
-        g.setColor(Color.GREEN);
-        GraphicsUtils.fillOval(g, x, y, 5, 5);
-        g.setColor(Color.BLACK);
-        GraphicsUtils.drawOval(g, x, y, 5, 5);
     }
 
     private void drawSquare(Graphics2D g, int x, int y)

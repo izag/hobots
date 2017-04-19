@@ -122,8 +122,8 @@ public class MainApplicationFrame extends JFrame
 					frame = addWindow(createLogWindow(LogLevel.Debug));
 					break;
 				case "RobotStateWindow":
-					RobotStateWindow stateWindow = addWindow(new RobotStateWindow("Robot-1", this.m_field.robot()));
-					this.m_field.robot().addObserver(stateWindow);
+					RobotStateWindow stateWindow = addWindow(new RobotStateWindow("Robot-1", this.m_field.currentRobot()));
+					this.m_field.currentRobot().addObserver(stateWindow);
 					frame = stateWindow;
 					break;
 				default:
@@ -139,8 +139,8 @@ public class MainApplicationFrame extends JFrame
 		addWindow(new GameWindow(this.m_field), 400, 400);
 		addWindow(createLogWindow(LogLevel.Error));
 
-		RobotStateWindow stateWindow = addWindow(new RobotStateWindow("Robot-1", this.m_field.robot()));
-		this.m_field.robot().addObserver(stateWindow);
+		RobotStateWindow stateWindow = addWindow(new RobotStateWindow("Robot-1", this.m_field.currentRobot()));
+		this.m_field.currentRobot().addObserver(stateWindow);
 	}
 
 	protected LogWindow createLogWindow(LogLevel level)
@@ -224,8 +224,8 @@ public class MainApplicationFrame extends JFrame
 				(event) -> addWindow(new GameWindow(this.m_field), 400, 400)));
 
 		addMenu.add(createMenuItem("Состояние робота", KeyEvent.VK_S, null, (event) -> {
-			RobotStateWindow stateWindow = addWindow(new RobotStateWindow("Robot-1", this.m_field.robot()));
-			this.m_field.robot().addObserver(stateWindow);
+			RobotStateWindow stateWindow = addWindow(new RobotStateWindow("Robot-1", this.m_field.currentRobot()));
+			this.m_field.currentRobot().addObserver(stateWindow);
 		}));
 
 		return addMenu;

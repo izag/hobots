@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.util.Observable;
+import java.util.Random;
 
-import robots.teacher_pack.log.Logger;
 import robots.teacher_pack.utils.GraphicsUtils;
 import robots.teacher_pack.utils.Utils;
 
@@ -13,13 +13,23 @@ public class Robot extends Observable
 {
 	private Point m_position;
     private volatile double m_direction = 0;
+    private Point m_target;
+	private final Random m_random;
+	private Field m_field;
+	private int m_magicCounter;
+	private int m_randomSteps;
 
-    static final double maxVelocity = 0.1;
-    static final double maxAngularVelocity = 0.1;
+    static final double maxVelocity = 5.0;
+    static final double maxAngularVelocity = 0.05;
 
-    public Robot()
+    public Robot(Field field)
     {
     	m_position = new Point(100, 100);
+    	m_target = new Point(150, 100);
+    	m_random = new Random();
+    	m_field = field;
+    	m_magicCounter = 0;
+    	m_randomSteps = 0;
     }
 
     public Point position()
@@ -37,27 +47,88 @@ public class Robot extends Observable
     	m_position = pos;
     }
 
-    void move(double velocity, double angularVelocity, double duration)
+	public void setTargetPosition(Point p)
     {
-    	Logger.debug("AVelocity1: " + angularVelocity);
+		m_target = p;
+    }
+
+	public Point target()
+	{
+		return m_target;
+	}
+
+	public int counter()
+	{
+		return m_magicCounter;
+	}
+
+	public void make_step()
+    {
+        double distance = Utils.distance(m_target, this.position());
+
+        if (distance < 0.5)
+            return;
+
+        double velocity = Robot.maxVelocity;
+
+        if (velocity > distance)
+        	velocity = distance;
+
+        double angleToTarget = Utils.angleTo(this.position(), m_target);
+
+        double angle = angleToTarget - this.direction();
+
+        if (angle < -Math.PI)
+        	angle += 2 * Math.PI;
+        else if (angle > Math.PI)
+        	angle -= 2 * Math.PI;
+
+        Point old_position = this.position();
+
+        if (this.m_magicCounter % 100 == 99)
+        	this.m_randomSteps = 5;
+
+        if (this.m_randomSteps > 0)
+        {
+        	angle = this.m_random.nextDouble();
+        	this.m_randomSteps--;
+        }
+
+        this.move(velocity, angle);
+
+        Point new_position = this.position();
+
+        while (m_field.collision().is_inside(new_position))
+        {
+        	this.setPosition(old_position);
+        	this.move(velocity, this.m_random.nextDouble());
+        	new_position = this.position();
+        }
+
+        this.m_magicCounter++;
+    }
+
+    private void move(double velocity, double angularVelocity)
+    {
+//    	Logger.debug("AVelocity1: " + angularVelocity);
 
         velocity = Utils.applyLimits(velocity, 0, maxVelocity);
         angularVelocity = Utils.applyLimits(angularVelocity, -maxAngularVelocity, maxAngularVelocity);
 
-        Logger.error("AVelocity2: " + angularVelocity);
+//        Logger.error("AVelocity2: " + angularVelocity);
 
-        double newX = m_position.x() + velocity / angularVelocity * (Math.sin(m_direction  + angularVelocity * duration) - Math.sin(m_direction));
+        double newX = m_position.x() + velocity / angularVelocity * (Math.sin(m_direction  + angularVelocity) - Math.sin(m_direction));
 
         if (!Double.isFinite(newX))
-            newX = m_position.x() + velocity * duration * Math.cos(m_direction);
+            newX = m_position.x() + velocity * Math.cos(m_direction);
 
-        double newY = m_position.y() - velocity / angularVelocity * (Math.cos(m_direction  + angularVelocity * duration) - Math.cos(m_direction));
+        double newY = m_position.y() - velocity / angularVelocity * (Math.cos(m_direction  + angularVelocity) - Math.cos(m_direction));
 
         if (!Double.isFinite(newY))
-            newY = m_position.y() + velocity * duration * Math.sin(m_direction);
+            newY = m_position.y() + velocity * Math.sin(m_direction);
 
         m_position = new Point(newX, newY);
-        m_direction = Utils.asNormalizedRadians(m_direction + angularVelocity * duration);
+        m_direction = Utils.asNormalizedRadians(m_direction + angularVelocity);
 
         setChanged();
         notifyObservers();
@@ -77,5 +148,18 @@ public class Robot extends Observable
         GraphicsUtils.fillOval(g, robotCenterX  + 10, robotCenterY, 5, 5);
         g.setColor(Color.BLACK);
         GraphicsUtils.drawOval(g, robotCenterX  + 10, robotCenterY, 5, 5);
+    }
+
+    public void drawTarget(Graphics2D g)
+    {
+    	int x = (int) this.m_target.x();
+    	int y = (int) this.m_target.y();
+
+    	AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0);
+        g.setTransform(t);
+        g.setColor(Color.GREEN);
+        GraphicsUtils.fillOval(g, x, y, 5, 5);
+        g.setColor(Color.BLACK);
+        GraphicsUtils.drawOval(g, x, y, 5, 5);
     }
 }

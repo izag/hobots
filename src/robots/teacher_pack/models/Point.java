@@ -23,6 +23,6 @@ public class Point
 	@Override
 	public String toString()
 	{
-		return "(" + m_x + "," + m_y + ")";
+		return "(" + m_x + ", " + m_y + ")";
 	}
 }
