@@ -1,5 +1,8 @@
 package robots.teacher_pack.models;
 
+import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -7,16 +10,25 @@ public class Field
 {
 	private Robot m_robot;
 
-	private Rectangle m_collision;
+	private List<CollisionModel> m_collisions;
 	public static final int frequency = 10;
 
 	private final Timer m_timer;
 
 	public Field()
 	{
-		m_robot = new Robot(this);
-		m_collision = new Rectangle(new Point(200, 200), new Point(300, 300));
-		m_timer = new Timer("Model events generator", true);
+		this.m_robot = new Robot(this);
+		this.m_collisions = new ArrayList<>();
+		this.m_timer = new Timer("Model events generator", true);
+
+		this.buildCollisionMap();
+	}
+
+	private void buildCollisionMap()
+	{
+		this.m_collisions.add(new Rectangle(new Point(200, 200), new Point(300, 300)));
+		this.m_collisions.add(new Rectangle(new Point(300, 200), new Point(400, 600)));
+		this.m_collisions.add(new Rectangle(new Point(200, 500), new Point(300, 600)));
 	}
 
 	public void setTargetPosition(java.awt.Point p)
@@ -31,7 +43,14 @@ public class Field
             @Override
             public void run()
             {
-                m_robot.make_step();
+            	Point old_position = m_robot.position();
+
+            	m_robot.make_step();
+
+                Point new_position = m_robot.position();
+
+                if (Field.this.is_collision(new_position))
+                	m_robot.setPosition(old_position);
             }
         }, 0, Field.frequency);
 	}
@@ -42,8 +61,21 @@ public class Field
 		return m_robot;
 	}
 
-	public Rectangle collision()
+	public boolean is_collision(Point p)
 	{
-		return m_collision;
+		for (CollisionModel barrier : this.m_collisions)
+		{
+			if (barrier.is_inside(p))
+				return true;
+		}
+
+		return false;
 	}
+
+
+    public void drawCollisionMap(Graphics2D g)
+    {
+    	for (CollisionModel barrier : this.m_collisions)
+    		barrier.draw(g);
+    }
 }

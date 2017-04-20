@@ -87,7 +87,7 @@ public class Robot extends Observable
         Point old_position = this.position();
 
         if (this.m_magicCounter % 100 == 99)
-        	this.m_randomSteps = 30;
+        	this.m_randomSteps = 5;
 
         if (this.m_randomSteps > 0)
         {
@@ -99,10 +99,10 @@ public class Robot extends Observable
 
         Point new_position = this.position();
 
-        while (m_field.collision().is_inside(new_position))
+        while (m_field.is_collision(new_position))
         {
         	this.setPosition(old_position);
-        	this.move(velocity, this.randomAngle());
+        	this.move(velocity, maxAngularVelocity);
         	new_position = this.position();
         }
 
@@ -137,7 +137,7 @@ public class Robot extends Observable
 
     private double randomAngle()
     {
-    	return (this.m_random.nextDouble() - 1) * Robot.maxAngularVelocity * 2;
+    	return (this.m_random.nextDouble() - 0.5) * Robot.maxAngularVelocity * 2;
     }
 
     public void draw(Graphics2D g)
