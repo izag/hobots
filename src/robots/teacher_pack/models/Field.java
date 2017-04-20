@@ -29,6 +29,7 @@ public class Field
 		this.m_collisions.add(new Rectangle(new Point(200, 200), new Point(300, 300)));
 		this.m_collisions.add(new Rectangle(new Point(300, 200), new Point(400, 600)));
 		this.m_collisions.add(new Rectangle(new Point(200, 500), new Point(300, 600)));
+		this.m_collisions.add(new Circle(new Point(500, 500), 50));
 	}
 
 	public void setTargetPosition(java.awt.Point p)

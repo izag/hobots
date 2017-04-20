@@ -21,46 +21,56 @@ public class Robot extends Observable
 	private int m_randomSteps;
 
     static final double maxVelocity = 5.0;
-    static final double maxAngularVelocity = 0.05;
+    static final double maxAngularVelocity = 0.03;
 
     public Robot(Field field)
     {
-    	m_position = new Point(100, 100);
-    	m_target = new Point(150, 100);
-    	m_random = new Random(new Date().getTime());
-    	m_field = field;
-    	m_magicCounter = 0;
-    	m_randomSteps = 0;
+    	this.m_position = new Point(100, 100);
+    	this.m_target = new Point(150, 100);
+    	this.m_random = new Random(new Date().getTime());
+    	this.m_field = field;
+    	this.m_magicCounter = 0;
+    	this.m_randomSteps = 0;
     }
 
     public Point position()
     {
-    	return m_position;
+    	return this.m_position;
     }
 
     public double direction()
     {
-    	return m_direction;
+    	return this.m_direction;
     }
 
     public void setPosition(Point pos)
     {
-    	m_position = pos;
+    	this.m_position = pos;
     }
 
 	public void setTargetPosition(Point p)
     {
-		m_target = p;
+		this.m_target = p;
+
+		this.m_magicCounter = 0;
+
+		double R = maxVelocity / maxAngularVelocity;
+
+		Point center1 = this.m_position.add(this.m_direction + Math.PI / 2, R);
+		Point center2 = this.m_position.add(this.m_direction - Math.PI / 2, R);
+
+		if (new Circle(center1, R).is_inside(p) || new Circle(center2, R).is_inside(p))
+			this.m_randomSteps = (int) R;
     }
 
 	public Point target()
 	{
-		return m_target;
+		return this.m_target;
 	}
 
 	public int counter()
 	{
-		return m_magicCounter;
+		return this.m_magicCounter;
 	}
 
 	public void make_step()
@@ -86,12 +96,12 @@ public class Robot extends Observable
 
         Point old_position = this.position();
 
-        if (this.m_magicCounter % 100 == 99)
-        	this.m_randomSteps = 5;
+        if (this.m_magicCounter % 1000 == 999)
+        	this.m_randomSteps = (int) (maxVelocity / maxAngularVelocity);
 
         if (this.m_randomSteps > 0)
         {
-        	angle = this.randomAngle();
+        	angle = 0;
         	this.m_randomSteps--;
         }
 
