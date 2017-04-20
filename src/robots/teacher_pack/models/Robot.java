@@ -3,6 +3,7 @@ package robots.teacher_pack.models;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.util.Date;
 import java.util.Observable;
 import java.util.Random;
 
@@ -26,7 +27,7 @@ public class Robot extends Observable
     {
     	m_position = new Point(100, 100);
     	m_target = new Point(150, 100);
-    	m_random = new Random();
+    	m_random = new Random(new Date().getTime());
     	m_field = field;
     	m_magicCounter = 0;
     	m_randomSteps = 0;
@@ -66,7 +67,7 @@ public class Robot extends Observable
     {
         double distance = Utils.distance(m_target, this.position());
 
-        if (distance < 0.5)
+        if (distance < Robot.maxVelocity / 2)
             return;
 
         double velocity = Robot.maxVelocity;
@@ -86,11 +87,11 @@ public class Robot extends Observable
         Point old_position = this.position();
 
         if (this.m_magicCounter % 100 == 99)
-        	this.m_randomSteps = 5;
+        	this.m_randomSteps = 30;
 
         if (this.m_randomSteps > 0)
         {
-        	angle = this.m_random.nextDouble();
+        	angle = this.randomAngle();
         	this.m_randomSteps--;
         }
 
@@ -101,7 +102,7 @@ public class Robot extends Observable
         while (m_field.collision().is_inside(new_position))
         {
         	this.setPosition(old_position);
-        	this.move(velocity, this.m_random.nextDouble());
+        	this.move(velocity, this.randomAngle());
         	new_position = this.position();
         }
 
@@ -132,6 +133,11 @@ public class Robot extends Observable
 
         setChanged();
         notifyObservers();
+    }
+
+    private double randomAngle()
+    {
+    	return (this.m_random.nextDouble() - 1) * Robot.maxAngularVelocity * 2;
     }
 
     public void draw(Graphics2D g)
