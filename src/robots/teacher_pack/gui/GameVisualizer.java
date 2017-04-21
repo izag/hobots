@@ -1,16 +1,21 @@
 package robots.teacher_pack.gui;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JPanel;
 
+import robots.teacher_pack.models.CollisionModel;
 import robots.teacher_pack.models.Field;
+import robots.teacher_pack.models.IRobot;
+import robots.teacher_pack.utils.GraphicsUtils;
 
 public class GameVisualizer extends JPanel
 {
@@ -58,10 +63,43 @@ public class GameVisualizer extends JPanel
 
         Graphics2D g2d = (Graphics2D) g;
 
-        m_field.currentRobot().draw(g2d);
-        m_field.currentRobot().drawTarget(g2d);
-        m_field.drawCollisionMap(g2d);
+        for (IRobot robot : m_field.getRobots())
+	        this.drawRobot(g2d, robot);
+
+        for (CollisionModel barrier : m_field.getCollisions())
+	        barrier.draw(g2d);
 
         g2d.dispose();
     }
+
+	public void drawRobot(Graphics2D g, IRobot robot)
+	{
+	    int robotCenterX = (int) robot.position().x();
+	    int robotCenterY = (int) robot.position().y();
+
+	    Color color = new Color(robot.id() * 173 % 256, robot.id() * 341 % 256, robot.id() * 1023 % 256);
+
+	    AffineTransform t = AffineTransform.getRotateInstance(robot.direction(), robotCenterX, robotCenterY);
+	    g.setTransform(t);
+	    g.setColor(color);
+	    GraphicsUtils.fillOval(g, robotCenterX, robotCenterY, 30, 10);
+	    g.setColor(Color.BLACK);
+	    GraphicsUtils.drawOval(g, robotCenterX, robotCenterY, 30, 10);
+	    g.setColor(Color.WHITE);
+	    GraphicsUtils.fillOval(g, robotCenterX  + 10, robotCenterY, 5, 5);
+	    g.setColor(Color.BLACK);
+	    GraphicsUtils.drawOval(g, robotCenterX  + 10, robotCenterY, 5, 5);
+
+	    this.drawTarget(g, (int) robot.target().x(), (int) robot.target().y(), color);
+	}
+
+	public void drawTarget(Graphics2D g, int x, int y, Color color)
+	{
+		AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0);
+	    g.setTransform(t);
+	    g.setColor(color);
+	    GraphicsUtils.fillOval(g, x, y, 5, 5);
+	    g.setColor(Color.BLACK);
+	    GraphicsUtils.drawOval(g, x, y, 5, 5);
+	}
 }

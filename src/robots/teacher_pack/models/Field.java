@@ -1,25 +1,20 @@
 package robots.teacher_pack.models;
 
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Field
 {
-	private Robot m_robot;
+	private Robot m_currentRobot;
 
 	private List<CollisionModel> m_collisions;
+	private List<Robot> m_robots;
 	public static final int frequency = 10;
-
-	private final Timer m_timer;
 
 	public Field()
 	{
-		this.m_robot = new Robot(this);
 		this.m_collisions = new ArrayList<>();
-		this.m_timer = new Timer("Model events generator", true);
+		this.m_robots = new ArrayList<>();
 
 		this.buildCollisionMap();
 	}
@@ -32,34 +27,33 @@ public class Field
 		this.m_collisions.add(new Circle(new Point(500, 500), 50));
 	}
 
-	public void setTargetPosition(java.awt.Point p)
-    {
-		m_robot.setTargetPosition(new Point(p.x, p.y));
-    }
-
-	public void start()
+	public void addRobot(Robot robot)
 	{
-		m_timer.schedule(new TimerTask()
-        {
-            @Override
-            public void run()
-            {
-            	Point old_position = m_robot.position();
+		if (this.m_currentRobot == null)
+			this.m_currentRobot = robot;
 
-            	m_robot.make_step();
-
-                Point new_position = m_robot.position();
-
-                if (Field.this.is_collision(new_position))
-                	m_robot.setPosition(old_position);
-            }
-        }, 0, Field.frequency);
+		this.m_robots.add(robot);
 	}
 
+	public List<Robot> getRobots()
+	{
+		return this.m_robots;
+	}
+
+	public List<CollisionModel> getCollisions()
+	{
+		return this.m_collisions;
+	}
+
+	public void setTargetPosition(java.awt.Point p)
+    {
+		for (IRobot robot : this.m_robots)
+			robot.setTargetPosition(new Point(p.x, p.y));
+    }
 
 	public Robot currentRobot()
 	{
-		return m_robot;
+		return m_currentRobot;
 	}
 
 	public boolean is_collision(Point p)
@@ -73,10 +67,9 @@ public class Field
 		return false;
 	}
 
-
-    public void drawCollisionMap(Graphics2D g)
-    {
-    	for (CollisionModel barrier : this.m_collisions)
-    		barrier.draw(g);
-    }
+	public void start()
+	{
+		for (Robot robot : this.m_robots)
+			robot.start();
+	}
 }

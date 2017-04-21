@@ -1,9 +1,14 @@
 package robots.teacher_pack.utils;
 
+import java.util.Date;
+import java.util.Random;
+
 import robots.teacher_pack.models.Point;
 
 public class Utils
 {
+	private static Random m_random = new Random(new Date().getTime());
+
 	public static double angleTo(Point from, Point to)
     {
         double diffX = to.x() - from.x();
@@ -38,4 +43,14 @@ public class Utils
 
 		return angle;
 	}
+
+    public static double randomDouble(double value)
+    {
+    	return (m_random.nextDouble() - 0.5) * value * 2;
+    }
+
+    public static double randomInt(int value)
+    {
+    	return m_random.nextInt(value);
+    }
 }
