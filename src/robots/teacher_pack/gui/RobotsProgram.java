@@ -14,16 +14,15 @@ import robots.teacher_pack.utils.Utils;
 
 public class RobotsProgram
 {
-    public static void main(String[] args)
-    {
+	public static void main(String[] args)
+	{
 		try
 		{
-//			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-//			UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-//			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			// UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+			// UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+			// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		}
-		catch (Exception e)
+		} catch (Exception e)
 		{
 			e.printStackTrace();
 		}
@@ -43,11 +42,12 @@ public class RobotsProgram
 		field.addRobot(new RobotGeneration3(2, field, commonPosition, commonTarget));
 		field.addRobot(new RobotGeneration4(3, field, commonPosition, commonTarget));
 
-		SwingUtilities.invokeLater(() -> {
-		    MainApplicationFrame frame = new MainApplicationFrame(field);
-		    frame.setExtendedState(Frame.MAXIMIZED_BOTH);
-		    frame.pack();
-		    frame.setVisible(true);
+		SwingUtilities.invokeLater(() ->
+		{
+			MainApplicationFrame frame = new MainApplicationFrame(field);
+			frame.setExtendedState(Frame.MAXIMIZED_BOTH);
+			frame.pack();
+			frame.setVisible(true);
 		});
 
 		field.start();

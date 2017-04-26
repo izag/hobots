@@ -14,77 +14,76 @@ import java.util.concurrent.ArrayBlockingQueue;
  */
 public class LogWindowSource
 {
-    private ArrayBlockingQueue<LogEntry> m_messages;
-    private final ArrayList<LogChangeListener> m_listeners;
-    private volatile LogChangeListener[] m_activeListeners;
+	private ArrayBlockingQueue<LogEntry> m_messages;
+	private final ArrayList<LogChangeListener> m_listeners;
+	private volatile LogChangeListener[] m_activeListeners;
 
-    public LogWindowSource(int iQueueLength)
-    {
-    	this.m_messages = new ArrayBlockingQueue<>(iQueueLength);
-    	this.m_listeners = new ArrayList<>();
-    }
+	public LogWindowSource(int iQueueLength)
+	{
+		this.m_messages = new ArrayBlockingQueue<>(iQueueLength);
+		this.m_listeners = new ArrayList<>();
+	}
 
-    public void registerListener(LogChangeListener listener)
-    {
-        synchronized(this.m_listeners)
-        {
-            this.m_listeners.add(listener);
-            this.m_activeListeners = null;
-        }
-    }
+	public void registerListener(LogChangeListener listener)
+	{
+		synchronized (this.m_listeners)
+		{
+			this.m_listeners.add(listener);
+			this.m_activeListeners = null;
+		}
+	}
 
-    public void unregisterListener(LogChangeListener listener)
-    {
-        synchronized(this.m_listeners)
-        {
-        	this.m_listeners.remove(listener);
-        	this.m_activeListeners = null;
-        }
-    }
+	public void unregisterListener(LogChangeListener listener)
+	{
+		synchronized (this.m_listeners)
+		{
+			this.m_listeners.remove(listener);
+			this.m_activeListeners = null;
+		}
+	}
 
-    public void append(LogLevel logLevel, String strMessage)
-    {
-        LogEntry entry = new LogEntry(logLevel, strMessage);
+	public void append(LogLevel logLevel, String strMessage)
+	{
+		LogEntry entry = new LogEntry(logLevel, strMessage);
 
-        boolean success = false;
+		boolean success = false;
 
-        while (!success)
-        {
-	        try
-	        {
-	        	this.m_messages.add(entry);
-	        	success = true;
-	        }
-	        catch (IllegalStateException ex)
-	        {
-	        	this.m_messages.poll();
-	        }
-        }
+		while (!success)
+		{
+			try
+			{
+				this.m_messages.add(entry);
+				success = true;
+			} catch (IllegalStateException ex)
+			{
+				this.m_messages.poll();
+			}
+		}
 
-        LogChangeListener [] activeListeners = m_activeListeners;
-        if (activeListeners == null)
-        {
-            synchronized (this.m_listeners)
-            {
-                if (this.m_activeListeners == null)
-                {
-                    activeListeners = this.m_listeners.toArray(new LogChangeListener [0]);
-                    this.m_activeListeners = activeListeners;
-                }
-            }
-        }
+		LogChangeListener[] activeListeners = m_activeListeners;
+		if (activeListeners == null)
+		{
+			synchronized (this.m_listeners)
+			{
+				if (this.m_activeListeners == null)
+				{
+					activeListeners = this.m_listeners.toArray(new LogChangeListener[0]);
+					this.m_activeListeners = activeListeners;
+				}
+			}
+		}
 
-        for (LogChangeListener listener : activeListeners)
-            listener.onLogChanged();
-    }
+		for (LogChangeListener listener : activeListeners)
+			listener.onLogChanged();
+	}
 
-    public int size()
-    {
-        return this.m_messages.size();
-    }
+	public int size()
+	{
+		return this.m_messages.size();
+	}
 
-    public Iterable<LogEntry> all()
-    {
-        return this.m_messages;
-    }
+	public Iterable<LogEntry> all()
+	{
+		return this.m_messages;
+	}
 }

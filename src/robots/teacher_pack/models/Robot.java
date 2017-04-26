@@ -67,7 +67,7 @@ public abstract class Robot extends Observable implements IRobot
 	public void setTargetPosition(Point p)
 	{
 		this.m_target = p;
-    	this.m_stepsCount = 0;
+		this.m_stepsCount = 0;
 	}
 
 	@Override

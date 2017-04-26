@@ -192,14 +192,11 @@ public class MainApplicationFrame extends JFrame
 		lookAndFeelMenu.setMnemonic(KeyEvent.VK_V);
 		lookAndFeelMenu.getAccessibleContext().setAccessibleDescription("Управление режимом отображения приложения");
 
-		lookAndFeelMenu.add(createMenuItem("Системная схема", KeyEvent.VK_S, null,
-			(event) -> setLookAndFeel(UIManager.getSystemLookAndFeelClassName())));
+		lookAndFeelMenu.add(createMenuItem("Системная схема", KeyEvent.VK_S, null, (event) -> setLookAndFeel(UIManager.getSystemLookAndFeelClassName())));
 
-		lookAndFeelMenu.add(createMenuItem("Универсальная схема", KeyEvent.VK_U, null,
-			(event) -> setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName())));
+		lookAndFeelMenu.add(createMenuItem("Универсальная схема", KeyEvent.VK_U, null, (event) -> setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName())));
 
-		lookAndFeelMenu.add(createMenuItem("Универсальная схема (Nimbus)", KeyEvent.VK_N, null,
-			(event) -> setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel")));
+		lookAndFeelMenu.add(createMenuItem("Универсальная схема (Nimbus)", KeyEvent.VK_N, null, (event) -> setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel")));
 
 		return lookAndFeelMenu;
 	}
@@ -210,8 +207,7 @@ public class MainApplicationFrame extends JFrame
 		testMenu.setMnemonic(KeyEvent.VK_T);
 		testMenu.getAccessibleContext().setAccessibleDescription("Тестовые команды");
 
-		testMenu.add(createMenuItem("Сообщение в лог", KeyEvent.VK_S, null,
-				(event) -> Logger.debug("Новая строка")));
+		testMenu.add(createMenuItem("Сообщение в лог", KeyEvent.VK_S, null, (event) -> Logger.debug("Новая строка")));
 
 		return testMenu;
 	}
@@ -222,16 +218,14 @@ public class MainApplicationFrame extends JFrame
 		addMenu.setMnemonic(KeyEvent.VK_W);
 		addMenu.getAccessibleContext().setAccessibleDescription("Добавление новых окон");
 
-		addMenu.add(createMenuItem("Протокол ошибок", KeyEvent.VK_E, null,
-				(event) -> addWindow(createLogWindow(LogLevel.Error))));
+		addMenu.add(createMenuItem("Протокол ошибок", KeyEvent.VK_E, null, (event) -> addWindow(createLogWindow(LogLevel.Error))));
 
-		addMenu.add(createMenuItem("Протокол отладки", KeyEvent.VK_D, null,
-				(event) -> addWindow(createLogWindow(LogLevel.Debug))));
+		addMenu.add(createMenuItem("Протокол отладки", KeyEvent.VK_D, null, (event) -> addWindow(createLogWindow(LogLevel.Debug))));
 
-		addMenu.add(createMenuItem("Игровое окно", KeyEvent.VK_G, null,
-				(event) -> addWindow(new GameWindow(this.m_field), 400, 400)));
+		addMenu.add(createMenuItem("Игровое окно", KeyEvent.VK_G, null, (event) -> addWindow(new GameWindow(this.m_field), 400, 400)));
 
-		addMenu.add(createMenuItem("Состояние робота", KeyEvent.VK_S, null, (event) -> {
+		addMenu.add(createMenuItem("Состояние робота", KeyEvent.VK_S, null, (event) ->
+		{
 			if (this.m_field.currentRobot() == null)
 				return;
 
@@ -249,8 +243,7 @@ public class MainApplicationFrame extends JFrame
 		menuBar.add(generateTestMenu());
 		menuBar.add(generateAddWindowMenu());
 		menuBar.add(createMenuItem("Выход", KeyEvent.VK_X, KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.ALT_MASK),
-			(event) -> Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(
-				new WindowEvent(this, WindowEvent.WINDOW_CLOSING))));
+				(event) -> Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING))));
 
 		return menuBar;
 	}
@@ -262,8 +255,7 @@ public class MainApplicationFrame extends JFrame
 			UIManager.setLookAndFeel(className);
 			SwingUtilities.updateComponentTreeUI(this);
 			invalidate();
-		}
-		catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e)
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e)
 		{
 			// just ignore
 		}

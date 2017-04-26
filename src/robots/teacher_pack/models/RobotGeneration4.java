@@ -10,23 +10,23 @@ public class RobotGeneration4 extends Robot
 	private int m_randomSteps;
 	private Queue<Point> m_path;
 
-    public RobotGeneration4(int id, Field field)
-    {
-    	super(id, field);
+	public RobotGeneration4(int id, Field field)
+	{
+		super(id, field);
 
-    	this.m_randomSteps = 0;
-    	this.m_path = new ConcurrentLinkedQueue<Point>();
-    }
+		this.m_randomSteps = 0;
+		this.m_path = new ConcurrentLinkedQueue<Point>();
+	}
 
-    public RobotGeneration4(int id, Field field, Point position, Point target)
-    {
-    	super(id, field);
+	public RobotGeneration4(int id, Field field, Point position, Point target)
+	{
+		super(id, field);
 
-    	this.m_position = position;
-    	this.m_target = target;
-    	this.m_randomSteps = 0;
-    	this.m_path = new ConcurrentLinkedQueue<Point>();
-    }
+		this.m_position = position;
+		this.m_target = target;
+		this.m_randomSteps = 0;
+		this.m_path = new ConcurrentLinkedQueue<Point>();
+	}
 
 	@Override
 	protected double maxVelocity()
@@ -49,19 +49,19 @@ public class RobotGeneration4 extends Robot
 	@Override
 	public void make_step()
 	{
-        double distance = Utils.distance(m_target, this.position());
+		double distance = Utils.distance(m_target, this.position());
 
-        if (distance < this.maxVelocity() / 2)
-        {
-	    	Point nextPoint = this.m_path.poll();
+		if (distance < this.maxVelocity() / 2)
+		{
+			Point nextPoint = this.m_path.poll();
 
-	    	if (nextPoint == null)
-	    		return;
+			if (nextPoint == null)
+				return;
 
-	    	this.m_target = nextPoint;
-	    	this.m_stepsCount = 0;
+			this.m_target = nextPoint;
+			this.m_stepsCount = 0;
 
-	    	double R = this.maxVelocity() / this.maxAngularVelocity();
+			double R = this.maxVelocity() / this.maxAngularVelocity();
 
 			Point center1 = this.m_position.add(this.m_direction + Math.PI / 2, R);
 			Point center2 = this.m_position.add(this.m_direction - Math.PI / 2, R);
@@ -69,43 +69,43 @@ public class RobotGeneration4 extends Robot
 			if (new Circle(center1, R).is_inside(this.m_target) || new Circle(center2, R).is_inside(this.m_target))
 				this.m_randomSteps = (int) R;
 
-	        return;
-        }
+			return;
+		}
 
-        double velocity = this.maxVelocity();
+		double velocity = this.maxVelocity();
 
-        if (velocity > distance)
-        	velocity = distance;
+		if (velocity > distance)
+			velocity = distance;
 
-        double angleToTarget = Utils.angleTo(this.position(), m_target);
+		double angleToTarget = Utils.angleTo(this.position(), m_target);
 
-        double angle = angleToTarget - this.direction();
+		double angle = angleToTarget - this.direction();
 
-        if (angle < -Math.PI)
-        	angle += 2 * Math.PI;
-        else if (angle > Math.PI)
-        	angle -= 2 * Math.PI;
+		if (angle < -Math.PI)
+			angle += 2 * Math.PI;
+		else if (angle > Math.PI)
+			angle -= 2 * Math.PI;
 
-        Point old_position = this.position();
+		Point old_position = this.position();
 
-        if (this.counter() % 1000 == 999)
-        	this.m_randomSteps = (int) (this.maxVelocity() / this.maxAngularVelocity());
+		if (this.counter() % 1000 == 999)
+			this.m_randomSteps = (int) (this.maxVelocity() / this.maxAngularVelocity());
 
-        if (this.m_randomSteps > 0)
-        {
-        	angle = 0;
-        	this.m_randomSteps--;
-        }
+		if (this.m_randomSteps > 0)
+		{
+			angle = 0;
+			this.m_randomSteps--;
+		}
 
-        this.move(velocity, angle);
+		this.move(velocity, angle);
 
-        Point new_position = this.position();
+		Point new_position = this.position();
 
-        while (m_field.is_collision(new_position))
-        {
-        	this.setPosition(old_position);
-        	this.move(velocity, this.maxAngularVelocity());
-        	new_position = this.position();
-        }
+		while (m_field.is_collision(new_position))
+		{
+			this.setPosition(old_position);
+			this.move(velocity, this.maxAngularVelocity());
+			new_position = this.position();
+		}
 	}
 }

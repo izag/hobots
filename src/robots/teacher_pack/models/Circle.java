@@ -31,13 +31,13 @@ public class Circle implements CollisionModel
 	{
 		int x = (int) this.m_center.x();
 		int y = (int) this.m_center.y();
-    	int d = (int) this.m_radius * 2;
+		int d = (int) this.m_radius * 2;
 
-    	AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0);
-        g.setTransform(t);
-        g.setColor(Color.BLUE);
-        GraphicsUtils.fillOval(g, x, y, d, d);
-        g.setColor(Color.BLACK);
-        GraphicsUtils.drawOval(g, x, y, d, d);
+		AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0);
+		g.setTransform(t);
+		g.setColor(Color.BLUE);
+		GraphicsUtils.fillOval(g, x, y, d, d);
+		g.setColor(Color.BLACK);
+		GraphicsUtils.drawOval(g, x, y, d, d);
 	}
 }

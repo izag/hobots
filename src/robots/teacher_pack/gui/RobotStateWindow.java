@@ -17,20 +17,20 @@ public class RobotStateWindow extends JInternalFrame implements Observer
 	private Robot m_robot;
 
 	public RobotStateWindow(String caption, Robot observable)
-    {
-        super(caption, true, true, true, true);
+	{
+		super(caption, true, true, true, true);
 
-        m_content = new JTextArea("");
-        m_content.setSize(300, 300);
-        m_content.setPreferredSize(m_content.getSize());
+		m_content = new JTextArea("");
+		m_content.setSize(300, 300);
+		m_content.setPreferredSize(m_content.getSize());
 
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.add(m_content, BorderLayout.CENTER);
-        getContentPane().add(panel);
-        pack();
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(m_content, BorderLayout.CENTER);
+		getContentPane().add(panel);
+		pack();
 
-        m_robot = observable;
-    }
+		m_robot = observable;
+	}
 
 	@Override
 	public void update(Observable obj, Object arg)

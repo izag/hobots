@@ -46,10 +46,10 @@ public class Field
 	}
 
 	public void setTargetPosition(java.awt.Point p)
-    {
+	{
 		for (IRobot robot : this.m_robots)
 			robot.setTargetPosition(new Point(p.x, p.y));
-    }
+	}
 
 	public Robot currentRobot()
 	{

@@ -15,60 +15,71 @@ import javax.swing.JPanel;
 public class PaintRectangle extends JPanel
 {
 	private static final long serialVersionUID = 1L;
-	public PaintRectangle() {
-        setPreferredSize(new Dimension(500, 500));
 
-        MouseAdapter listener = new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                updateMouseRectangle(e);
-            }
+	public PaintRectangle()
+	{
+		setPreferredSize(new Dimension(500, 500));
 
-            private void updateMouseRectangle(MouseEvent e) {
-                e.getPoint();
-                repaint();
-            }
+		MouseAdapter listener = new MouseAdapter()
+		{
+			@Override
+			public void mousePressed(MouseEvent e)
+			{
+				updateMouseRectangle(e);
+			}
 
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                updateMouseRectangle(e);
-            }
+			private void updateMouseRectangle(MouseEvent e)
+			{
+				e.getPoint();
+				repaint();
+			}
 
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                repaint();
-            }
-        };
-        addMouseListener(listener);
-        addMouseMotionListener(listener);
-    }
+			@Override
+			public void mouseDragged(MouseEvent e)
+			{
+				updateMouseRectangle(e);
+			}
 
-    private Rectangle getRectangle()
-    {
-        return new Rectangle(100, 100, 30, 30);
-    }
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				repaint();
+			}
+		};
+		addMouseListener(listener);
+		addMouseMotionListener(listener);
+	}
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Rectangle rectangle = getRectangle();
-        if(rectangle != null) {
-            Graphics2D gg = (Graphics2D) g;
-            gg.setColor(Color.BLUE);
-            gg.fill(rectangle);
-            gg.setColor(Color.BLACK);
-            gg.draw(rectangle);
-        }
-    }
+	private Rectangle getRectangle()
+	{
+		return new Rectangle(100, 100, 30, 30);
+	}
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            JFrame frame = new JFrame("Test");
-            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            frame.getContentPane().add(new PaintRectangle());
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
-    }
+	@Override
+	protected void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		Rectangle rectangle = getRectangle();
+		if (rectangle != null)
+		{
+			Graphics2D gg = (Graphics2D) g;
+			gg.setColor(Color.BLUE);
+			gg.fill(rectangle);
+			gg.setColor(Color.BLACK);
+			gg.draw(rectangle);
+		}
+	}
+
+	public static void main(String[] args)
+	{
+		EventQueue.invokeLater(() ->
+		{
+			JFrame frame = new JFrame("Test");
+			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			frame.getContentPane().add(new PaintRectangle());
+			frame.pack();
+			frame.setLocationRelativeTo(null);
+			frame.setVisible(true);
+		});
+	}
 }

@@ -34,12 +34,12 @@ public class Rectangle implements CollisionModel
 	public void draw(Graphics2D g)
 	{
 		AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0);
-        g.setTransform(t);
+		g.setTransform(t);
 
-        g.setColor(Color.BLUE);
-        g.fillRect(this.m_x, this.m_y, this.m_width, this.m_height);
+		g.setColor(Color.BLUE);
+		g.fillRect(this.m_x, this.m_y, this.m_width, this.m_height);
 
-        g.setColor(Color.BLACK);
-        g.drawRect(this.m_x, this.m_y, this.m_width, this.m_height);
+		g.setColor(Color.BLACK);
+		g.drawRect(this.m_x, this.m_y, this.m_width, this.m_height);
 	}
 }
