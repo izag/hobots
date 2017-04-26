@@ -8,7 +8,7 @@ import robots.teacher_pack.utils.Utils;
 
 public abstract class Robot extends Observable implements IRobot
 {
-	private int m_magicCounter;
+	protected int m_stepsCount;
 
 	protected Point m_position;
 	protected volatile double m_direction = 0;
@@ -24,7 +24,7 @@ public abstract class Robot extends Observable implements IRobot
 		this.m_field = field;
 		this.m_position = new Point(100, 100);
     	this.m_target = new Point(150, 100);
-    	this.m_magicCounter = 0;
+    	this.m_stepsCount = 0;
 
     	this.m_timer = new Timer("Robot events generator", true);
 	}
@@ -54,7 +54,7 @@ public abstract class Robot extends Observable implements IRobot
     @Override
 	public final int counter()
 	{
-		return this.m_magicCounter;
+		return this.m_stepsCount;
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public abstract class Robot extends Observable implements IRobot
 	public void setTargetPosition(Point p)
 	{
 		this.m_target = p;
-		this.m_magicCounter = 0;
+    	this.m_stepsCount = 0;
 	}
 
 	@Override
@@ -119,7 +119,7 @@ public abstract class Robot extends Observable implements IRobot
         m_position = new Point(newX, newY);
         m_direction = Utils.asNormalizedRadians(m_direction + angularVelocity);
 
-        this.m_magicCounter++;
+        this.m_stepsCount++;
 
         setChanged();
         notifyObservers();

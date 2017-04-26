@@ -122,13 +122,21 @@ public class MainApplicationFrame extends JFrame
 					frame = addWindow(createLogWindow(LogLevel.Debug));
 					break;
 				case "RobotStateWindow":
+				{
+					if (this.m_field.currentRobot() == null)
+						break;
+
 					RobotStateWindow stateWindow = addWindow(new RobotStateWindow("Robot-1", this.m_field.currentRobot()));
 					this.m_field.currentRobot().addObserver(stateWindow);
 					frame = stateWindow;
 					break;
+				}
 				default:
 					continue;
 			}
+
+			if (frame == null)
+				continue;
 
 			StateUtils.loadComponentState(frame, new SubMapView(state, prefix));
 		}
@@ -224,6 +232,9 @@ public class MainApplicationFrame extends JFrame
 				(event) -> addWindow(new GameWindow(this.m_field), 400, 400)));
 
 		addMenu.add(createMenuItem("Состояние робота", KeyEvent.VK_S, null, (event) -> {
+			if (this.m_field.currentRobot() == null)
+				return;
+
 			RobotStateWindow stateWindow = addWindow(new RobotStateWindow("Robot-1", this.m_field.currentRobot()));
 			this.m_field.currentRobot().addObserver(stateWindow);
 		}));
