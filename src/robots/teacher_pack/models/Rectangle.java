@@ -25,7 +25,7 @@ public class Rectangle implements CollisionModel
 	}
 
 	@Override
-	public boolean is_inside(Point p)
+	public boolean isInside(Point p)
 	{
 		return this.m_top_left.x() <= p.x() && this.m_bottom_right.x() >= p.x() && this.m_top_left.y() <= p.y() && this.m_bottom_right.y() >= p.y();
 	}
@@ -41,5 +41,10 @@ public class Rectangle implements CollisionModel
 
 		g.setColor(Color.BLACK);
 		g.drawRect(this.m_x, this.m_y, this.m_width, this.m_height);
+	}
+
+	public getBouningPoints()
+	{
+
 	}
 }

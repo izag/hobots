@@ -43,7 +43,7 @@ public class RobotGeneration3 extends Robot
 		Point center1 = this.m_position.add(this.m_direction + Math.PI / 2, R);
 		Point center2 = this.m_position.add(this.m_direction - Math.PI / 2, R);
 
-		if (new Circle(center1, R).is_inside(p) || new Circle(center2, R).is_inside(p))
+		if (new Circle(center1, R).isInside(p) || new Circle(center2, R).isInside(p))
 			this.m_randomSteps = (int) R;
 	}
 

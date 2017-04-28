@@ -60,7 +60,7 @@ public class Field
 	{
 		for (CollisionModel barrier : this.m_collisions)
 		{
-			if (barrier.is_inside(p))
+			if (barrier.isInside(p))
 				return true;
 		}
 

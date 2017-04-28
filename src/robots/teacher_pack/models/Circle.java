@@ -18,7 +18,7 @@ public class Circle implements CollisionModel
 	}
 
 	@Override
-	public boolean is_inside(Point p)
+	public boolean isInside(Point p)
 	{
 		double dx = p.x() - this.m_center.x();
 		double dy = p.y() - this.m_center.y();
