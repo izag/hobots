@@ -70,7 +70,7 @@ public class RobotGeneration2 extends Robot
 
 		Point new_position = this.position();
 
-		while (m_field.is_collision(new_position))
+		while (m_field.isCollision(new_position))
 		{
 			this.setPosition(old_position);
 			this.move(velocity, Utils.randomDouble(this.maxAngularVelocity()));

@@ -32,10 +32,10 @@ public class RobotsProgram
 		Point commonPosition = new Point(Utils.randomInt(1000), Utils.randomInt(1000));
 		Point commonTarget = new Point(Utils.randomInt(1000), Utils.randomInt(1000));
 
-		while (field.is_collision(commonTarget))
+		while (field.isCollision(commonTarget))
 			commonTarget = new Point(Utils.randomInt(1000), Utils.randomInt(1000));
 
-		while (field.is_collision(commonPosition))
+		while (field.isCollision(commonPosition))
 			commonPosition = new Point(Utils.randomInt(1000), Utils.randomInt(1000));
 
 		field.addRobot(new RobotGeneration2(1, field, commonPosition, commonTarget));

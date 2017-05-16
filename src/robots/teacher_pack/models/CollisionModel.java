@@ -5,6 +5,8 @@ import java.util.List;
 
 public interface CollisionModel
 {
+	static final double offset = 10;
+
 	boolean isInside(Point p);
 
 	boolean isInsideBounder(Point p);

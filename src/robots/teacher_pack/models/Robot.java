@@ -138,7 +138,7 @@ public abstract class Robot extends Observable implements IRobot
 
                 Point new_position = Robot.this.position();
 
-                if (Robot.this.m_field.is_collision(new_position))
+                if (Robot.this.m_field.isCollision(new_position))
                 	Robot.this.setPosition(old_position);
             }
         }, 0, Field.frequency);

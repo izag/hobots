@@ -3,6 +3,7 @@ package robots.teacher_pack.models;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.util.List;
 
 public class Rectangle implements CollisionModel
 {
@@ -43,8 +44,16 @@ public class Rectangle implements CollisionModel
 		g.drawRect(this.m_x, this.m_y, this.m_width, this.m_height);
 	}
 
-	public getBouningPoints()
+	@Override
+	public boolean isInsideBounder(Point p)
 	{
+		return this.m_top_left.x() - CollisionModel.offset <= p.x() && this.m_bottom_right.x() + CollisionModel.offset >= p.x() && this.m_top_left.y() - CollisionModel.offset <= p.y() && this.m_bottom_right.y() + CollisionModel.offset >= p.y();
+	}
 
+	@Override
+	public List<Point> getBoundingPoints()
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

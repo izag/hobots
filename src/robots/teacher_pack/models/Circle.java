@@ -3,6 +3,7 @@ package robots.teacher_pack.models;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.util.List;
 
 import robots.teacher_pack.utils.GraphicsUtils;
 
@@ -39,5 +40,22 @@ public class Circle implements CollisionModel
 		GraphicsUtils.fillOval(g, x, y, d, d);
 		g.setColor(Color.BLACK);
 		GraphicsUtils.drawOval(g, x, y, d, d);
+	}
+
+	@Override
+	public boolean isInsideBounder(Point p)
+	{
+		double dx = p.x() - this.m_center.x();
+		double dy = p.y() - this.m_center.y();
+		double r = this.m_radius + CollisionModel.offset;
+
+		return dx * dx + dy * dy <= r * r;
+	}
+
+	@Override
+	public List<Point> getBoundingPoints()
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

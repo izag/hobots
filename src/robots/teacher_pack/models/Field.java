@@ -56,11 +56,22 @@ public class Field
 		return m_currentRobot;
 	}
 
-	public boolean is_collision(Point p)
+	public boolean isCollision(Point p)
 	{
 		for (CollisionModel barrier : this.m_collisions)
 		{
 			if (barrier.isInside(p))
+				return true;
+		}
+
+		return false;
+	}
+
+	public boolean isOffsetCollision(Point p)
+	{
+		for (CollisionModel barrier : this.m_collisions)
+		{
+			if (barrier.isInsideBounder(p))
 				return true;
 		}
 
