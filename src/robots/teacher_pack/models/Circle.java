@@ -3,6 +3,7 @@ package robots.teacher_pack.models;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.util.LinkedList;
 import java.util.List;
 
 import robots.teacher_pack.utils.GraphicsUtils;
@@ -55,7 +56,13 @@ public class Circle implements CollisionModel
 	@Override
 	public List<Point> getBoundingPoints()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		List<Point> bounders = new LinkedList<>();
+
+		bounders.add(new Point(this.m_center.x() - this.m_radius - CollisionModel.offset * 2, this.m_center.y() - this.m_radius - CollisionModel.offset * 2));
+		bounders.add(new Point(this.m_center.x() + this.m_radius + CollisionModel.offset * 2, this.m_center.y() - this.m_radius - CollisionModel.offset * 2));
+		bounders.add(new Point(this.m_center.x() + this.m_radius + CollisionModel.offset * 2, this.m_center.y() + this.m_radius + CollisionModel.offset * 2));
+		bounders.add(new Point(this.m_center.x() - this.m_radius - CollisionModel.offset * 2, this.m_center.y() + this.m_radius + CollisionModel.offset * 2));
+
+		return bounders;
 	}
 }

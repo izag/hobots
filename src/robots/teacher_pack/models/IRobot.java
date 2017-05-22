@@ -1,5 +1,7 @@
 package robots.teacher_pack.models;
 
+import java.awt.Graphics2D;
+
 public interface IRobot
 {
 	int id();
@@ -17,4 +19,6 @@ public interface IRobot
 	void make_step();
 
 	int counter();
+
+	void draw(Graphics2D g);
 }

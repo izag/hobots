@@ -1,5 +1,6 @@
 package robots.teacher_pack.models;
 
+import java.awt.Graphics2D;
 import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -142,5 +143,10 @@ public abstract class Robot extends Observable implements IRobot
                 	Robot.this.setPosition(old_position);
             }
         }, 0, Field.frequency);
+	}
+
+	@Override
+	public void draw(Graphics2D g)
+	{
 	}
 }

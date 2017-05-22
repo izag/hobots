@@ -91,6 +91,8 @@ public class GameVisualizer extends JPanel
 		GraphicsUtils.drawOval(g, robotCenterX + 10, robotCenterY, 5, 5);
 
 		this.drawTarget(g, (int) robot.target().x(), (int) robot.target().y(), color);
+
+		robot.draw(g);
 	}
 
 	public void drawTarget(Graphics2D g, int x, int y, Color color)
