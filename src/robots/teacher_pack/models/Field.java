@@ -1,6 +1,5 @@
 package robots.teacher_pack.models;
 
-import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,11 +78,11 @@ public class Field
 		return false;
 	}
 
-	public boolean isOffsetCollision(Line2D.Double line)
+	public boolean isOffsetCollision(Point start, Point end)
 	{
 		for (CollisionModel barrier : this.m_collisions)
 		{
-			if (barrier.isIntersectsLine(line))
+			if (barrier.intersectsLine(start, end))
 				return true;
 		}
 

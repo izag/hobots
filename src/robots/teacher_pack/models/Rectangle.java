@@ -67,15 +67,15 @@ public class Rectangle implements CollisionModel
 	}
 
 	@Override
-	public boolean isIntersectsLine(Line2D.Double line)
+	public boolean intersectsLine(Point start, Point end)
 	{
-		Rectangle2D rect = new Rectangle2D.Double(
-				this.m_top_left.x() - CollisionModel.offset * 2,
-				this.m_top_left.y() - CollisionModel.offset * 2,
-				this.m_bottom_right.x() - this.m_top_left.x() + CollisionModel.offset * 4,
-				this.m_bottom_right.y() - this.m_top_left.y() + CollisionModel.offset * 4
+		Rectangle2D boundingRect = new Rectangle2D.Double (
+				this.m_top_left.x() - CollisionModel.offset,
+				this.m_top_left.y() - CollisionModel.offset,
+				this.m_bottom_right.x() - this.m_top_left.x() + CollisionModel.offset * 2,
+				this.m_bottom_right.y() - this.m_top_left.y() + CollisionModel.offset * 2
 		);
 
-		return rect.intersectsLine(line);
+		return boundingRect.intersectsLine(new Line2D.Double(start.x(), start.y(), end.x(), end.y()));
 	}
 }
