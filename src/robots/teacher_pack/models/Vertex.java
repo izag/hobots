@@ -28,19 +28,4 @@ public class Vertex implements Comparable<Vertex>
 	{
 		return this.point + " - " + this.dist;
 	}
-
-//	@Override
-//	public boolean equals(Object o)
-//	{
-//		if (!(o instanceof Vertex))
-//			return false;
-//
-//		return this.number == ((Vertex)o).number;
-//	}
-//
-//	@Override
-//	public int hashCode()
-//	{
-//		return this.number;
-//	}
 }

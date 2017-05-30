@@ -3,6 +3,8 @@ package robots.teacher_pack.models;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -62,5 +64,18 @@ public class Rectangle implements CollisionModel
 		bounders.add(new Point(this.m_top_left.x() - CollisionModel.offset * 2, this.m_bottom_right.y() + CollisionModel.offset * 2));
 
 		return bounders;
+	}
+
+	@Override
+	public boolean isIntersectsLine(Line2D.Double line)
+	{
+		Rectangle2D rect = new Rectangle2D.Double(
+				this.m_top_left.x() - CollisionModel.offset * 2,
+				this.m_top_left.y() - CollisionModel.offset * 2,
+				this.m_bottom_right.x() - this.m_top_left.x() + CollisionModel.offset * 4,
+				this.m_bottom_right.y() - this.m_top_left.y() + CollisionModel.offset * 4
+		);
+
+		return rect.intersectsLine(line);
 	}
 }

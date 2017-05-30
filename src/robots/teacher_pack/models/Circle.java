@@ -3,6 +3,8 @@ package robots.teacher_pack.models;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D.Double;
+import java.awt.geom.Rectangle2D;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -64,5 +66,18 @@ public class Circle implements CollisionModel
 		bounders.add(new Point(this.m_center.x() - this.m_radius - CollisionModel.offset * 2, this.m_center.y() + this.m_radius + CollisionModel.offset * 2));
 
 		return bounders;
+	}
+
+	@Override
+	public boolean isIntersectsLine(Double line)
+	{
+		Rectangle2D rect = new Rectangle2D.Double(
+				this.m_center.x() - this.m_radius - CollisionModel.offset * 2,
+				this.m_center.y() - this.m_radius - CollisionModel.offset * 2,
+				this.m_radius * 2 + CollisionModel.offset * 4,
+				this.m_radius * 2 + CollisionModel.offset * 4
+		);
+
+		return rect.intersectsLine(line);
 	}
 }
