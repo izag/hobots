@@ -78,7 +78,7 @@ public abstract class Robot extends Observable implements IRobot
 	}
 
 	@Override
-	public void make_step()
+	public void makeStep()
 	{
 	    double distance = Utils.distance(m_target, this.position());
 
@@ -135,7 +135,7 @@ public abstract class Robot extends Observable implements IRobot
             {
             	Point old_position = Robot.this.position();
 
-            	Robot.this.make_step();
+            	Robot.this.makeStep();
 
                 Point new_position = Robot.this.position();
 

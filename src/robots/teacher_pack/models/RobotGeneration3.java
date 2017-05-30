@@ -48,7 +48,7 @@ public class RobotGeneration3 extends Robot
 	}
 
 	@Override
-	public void make_step()
+	public void makeStep()
 	{
 		double distance = Utils.distance(m_target, this.position());
 

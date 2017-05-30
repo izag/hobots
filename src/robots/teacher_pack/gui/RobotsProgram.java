@@ -22,7 +22,8 @@ public class RobotsProgram
 			// UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
 			// UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}

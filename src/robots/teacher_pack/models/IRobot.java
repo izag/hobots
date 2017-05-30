@@ -16,7 +16,7 @@ public interface IRobot
 
 	Point target();
 
-	void make_step();
+	void makeStep();
 
 	int counter();
 

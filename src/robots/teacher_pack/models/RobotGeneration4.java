@@ -1,8 +1,7 @@
 package robots.teacher_pack.models;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,14 +10,13 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
-import robots.teacher_pack.utils.GraphicsUtils;
 import robots.teacher_pack.utils.Utils;
 
 public class RobotGeneration4 extends Robot
 {
 	private int m_randomSteps;
 	private Queue<Point> m_path;
-	private List<Vertex> m_verteces;
+	private List<Vertex> m_vertices;
 
 	public RobotGeneration4(int id, Field field)
 	{
@@ -54,10 +52,11 @@ public class RobotGeneration4 extends Robot
 	public void setTargetPosition(Point p)
 	{
 		this.buildPath(p);
+		this.m_target = this.m_path.poll();
 	}
 
 	@Override
-	public void make_step()
+	public void makeStep()
 	{
 		double distance = Utils.distance(m_target, this.position());
 
@@ -122,25 +121,48 @@ public class RobotGeneration4 extends Robot
 	@Override
 	public void draw(Graphics2D g)
 	{
-		if (this.m_verteces == null)
-			return;
+//		if (this.m_vertices == null)
+//			return;
+//
+//		for (Vertex v : this.m_vertices)
+//		{
+//			int x = (int) v.point().x();
+//			int y = (int) v.point().y();
+//			AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0);
+//			g.setTransform(t);
+//			g.setColor(Color.GRAY);
+//			GraphicsUtils.fillOval(g, x, y, 5, 5);
+//			g.setColor(Color.BLACK);
+//			GraphicsUtils.drawOval(g, x, y, 5, 5);
+//		}
+//
+//		for (int i = 0; i < this.m_vertices.size(); i++)
+//		{
+//			for (int j = i + 1; j < this.m_vertices.size(); j++)
+//			{
+//				Point start = this.m_vertices.get(i).point();
+//				Point end = this.m_vertices.get(j).point();
+//
+//				if (this.m_field.isOffsetCollision(start, end))
+//					continue;
+//
+//				g.draw(new Line2D.Double(start.x(), start.y(), end.x(), end.y()));
+//			}
+//		}
 
-		for (Vertex v : this.m_verteces)
+		Point prev = this.m_target;
+
+		for (Point p : this.m_path)
 		{
-			int x = (int) v.point().x();
-			int y = (int) v.point().y();
-			AffineTransform t = AffineTransform.getRotateInstance(0, 0, 0);
-			g.setTransform(t);
-			g.setColor(Color.GRAY);
-			GraphicsUtils.fillOval(g, x, y, 5, 5);
-			g.setColor(Color.BLACK);
-			GraphicsUtils.drawOval(g, x, y, 5, 5);
+			g.draw(new Line2D.Double(prev.x(), prev.y(), p.x(), p.y()));
+
+			prev = p;
 		}
 	}
 
 	private void buildPath(Point dest)
 	{
-		this.m_verteces = this.m_field.getCollisions().stream()
+		this.m_vertices = this.m_field.getCollisions().stream()
 			.flatMap((barrier) -> barrier.getBoundingPoints().stream())
 			.filter((point) -> !this.m_field.isOffsetCollision(point))
 			.map((point) -> new Vertex(point, Double.MAX_VALUE))
@@ -149,13 +171,13 @@ public class RobotGeneration4 extends Robot
 		Vertex source = new Vertex(this.m_position, 0.0);
 		Vertex destination = new Vertex(dest, Double.MAX_VALUE);
 
-		this.m_verteces.add(source);
-		this.m_verteces.add(destination);
+		this.m_vertices.add(source);
+		this.m_vertices.add(destination);
 
 		// dijkstra
 		PriorityQueue<Vertex> q = new PriorityQueue<>();
 
-		for (Vertex v : this.m_verteces)
+		for (Vertex v : this.m_vertices)
 			q.add(v);
 
 		while (!q.isEmpty())
@@ -168,6 +190,12 @@ public class RobotGeneration4 extends Robot
 			for (Object o : q.toArray())
 			{
 				Vertex v = (Vertex) o;
+
+				Point start = u.point();
+				Point end = v.point();
+
+				if (this.m_field.isOffsetCollision(start, end))
+					continue;
 
 				double alt = u.dist + Utils.distance(v.point(), u.point());
 

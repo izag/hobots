@@ -72,10 +72,10 @@ public class Circle implements CollisionModel
 	public boolean intersectsLine(Point start, Point end)
 	{
 		Rectangle2D boundingRect = new Rectangle2D.Double (
-				this.m_center.x() - this.m_radius - CollisionModel.offset * 2,
-				this.m_center.y() - this.m_radius - CollisionModel.offset * 2,
-				2 * this.m_radius + CollisionModel.offset * 4,
-				2 * this.m_radius + CollisionModel.offset * 4
+				this.m_center.x() - this.m_radius - CollisionModel.offset,
+				this.m_center.y() - this.m_radius - CollisionModel.offset,
+				2 * this.m_radius + CollisionModel.offset * 2,
+				2 * this.m_radius + CollisionModel.offset * 2
 		);
 
 		return boundingRect.intersectsLine(new Line2D.Double(start.x(), start.y(), end.x(), end.y()));
