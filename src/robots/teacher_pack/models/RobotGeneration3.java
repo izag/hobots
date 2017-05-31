@@ -17,8 +17,9 @@ public class RobotGeneration3 extends Robot
 		super(id, field);
 
 		this.m_position = position;
-		this.m_target = target;
 		this.m_randomSteps = 0;
+
+		this.setTargetPosition(target);
 	}
 
 	@Override

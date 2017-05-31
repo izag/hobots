@@ -30,10 +30,11 @@ public class RobotGeneration4 extends Robot
 	{
 		super(id, field);
 
-		this.m_position = position;
-		this.m_target = target;
-		this.m_randomSteps = 0;
 		this.m_path = new ConcurrentLinkedQueue<>();
+		this.m_randomSteps = 0;
+		this.m_position = position;
+
+		this.setTargetPosition(target);
 	}
 
 	@Override
@@ -53,6 +54,9 @@ public class RobotGeneration4 extends Robot
 	{
 		this.buildPath(p);
 		this.m_target = this.m_path.poll();
+
+		if (this.m_target == null)
+			this.m_target = this.m_position;
 	}
 
 	@Override
@@ -151,11 +155,9 @@ public class RobotGeneration4 extends Robot
 //		}
 
 		Point prev = this.m_target;
-
 		for (Point p : this.m_path)
 		{
 			g.draw(new Line2D.Double(prev.x(), prev.y(), p.x(), p.y()));
-
 			prev = p;
 		}
 	}

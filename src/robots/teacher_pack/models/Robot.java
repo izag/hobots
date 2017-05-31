@@ -24,8 +24,7 @@ public abstract class Robot extends Observable implements IRobot
 		this.m_id = id;
 		this.m_field = field;
 		this.m_position = new Point(100, 100);
-    	this.m_target = new Point(150, 100);
-    	this.m_stepsCount = 0;
+		this.m_target = new Point(150, 100);
 
     	this.m_timer = new Timer("Robot events generator", true);
 	}
