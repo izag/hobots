@@ -1,9 +1,6 @@
 package robots.teacher_pack.gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -24,47 +21,47 @@ public class GameWindow extends JInternalFrame
 		getContentPane().add(panel);
 		pack();
 
-		addComponentListener(new ComponentListener()
-		{
-			@Override
-			public void componentShown(ComponentEvent e)
-			{
-				EventQueue.invokeLater(() ->
-				{
-					m_visualizer.repaint();
-					repaint();
-				});
-			}
-
-			@Override
-			public void componentResized(ComponentEvent e)
-			{
-				EventQueue.invokeLater(() ->
-				{
-					m_visualizer.repaint();
-					repaint();
-				});
-			}
-
-			@Override
-			public void componentHidden(ComponentEvent arg0)
-			{
-				EventQueue.invokeLater(() ->
-				{
-					m_visualizer.repaint();
-					repaint();
-				});
-			}
-
-			@Override
-			public void componentMoved(ComponentEvent arg0)
-			{
-				EventQueue.invokeLater(() ->
-				{
-					m_visualizer.repaint();
-					repaint();
-				});
-			}
-		});
+//		addComponentListener(new ComponentListener()
+//		{
+//			@Override
+//			public void componentShown(ComponentEvent e)
+//			{
+//				EventQueue.invokeLater(() ->
+//				{
+//					m_visualizer.repaint();
+//					repaint();
+//				});
+//			}
+//
+//			@Override
+//			public void componentResized(ComponentEvent e)
+//			{
+//				EventQueue.invokeLater(() ->
+//				{
+//					m_visualizer.repaint();
+//					repaint();
+//				});
+//			}
+//
+//			@Override
+//			public void componentHidden(ComponentEvent arg0)
+//			{
+//				EventQueue.invokeLater(() ->
+//				{
+//					m_visualizer.repaint();
+//					repaint();
+//				});
+//			}
+//
+//			@Override
+//			public void componentMoved(ComponentEvent arg0)
+//			{
+//				EventQueue.invokeLater(() ->
+//				{
+//					m_visualizer.repaint();
+//					repaint();
+//				});
+//			}
+//		});
 	}
 }

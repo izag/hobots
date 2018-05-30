@@ -48,7 +48,7 @@ public class GameVisualizer extends JPanel
 			{
 				onRedrawEvent();
 			}
-		}, 0, 50);
+		}, 0, 40);
 	}
 
 	private void onRedrawEvent()
@@ -69,7 +69,7 @@ public class GameVisualizer extends JPanel
 		for (CollisionModel barrier : m_field.getCollisions())
 			barrier.draw(g2d);
 
-		g2d.dispose();
+//		g2d.dispose();
 	}
 
 	public void drawRobot(Graphics2D g, IRobot robot)
